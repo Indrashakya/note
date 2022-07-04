@@ -1,7 +1,7 @@
 # About the app 
 you can able to add New note it will track Date and month and time also keep record with your publish note and once you get done that you can able to delet and add new note in there. if you are not fill form you got an error message. all forms are mandotory.
-<img width="1279" alt="Screen Shot 2022-07-03 at 10 34 09 PM" src="https://user-im![Uploading Screen Shot 2022-07-03 at 10.35.13 PM.png…]()
-ages.githubusercontent.com/107881309/177077017-da6828c0-95f4-4506-a6bf-6bcb9a95aa24.png">
+
+
 <img width="1276" alt="Screen Shot 2022-07-03 at 10 35 57 PM" src="https://user-images.githubusercontent.com/107881309/177077158-e3fa636f-ec81-4a6e-925e-96ac56a1b8fa.png">
 
 
