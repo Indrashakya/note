@@ -1,3 +1,5 @@
+# About the app 
+you can able to add New note it will track Date and month and time also keep record with your publish note and once you get done that you can able to delet and add new note in there. if you are not fill form you got an error message. all forms are mandotory. 
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
