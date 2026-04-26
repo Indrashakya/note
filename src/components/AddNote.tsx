@@ -1,59 +1,97 @@
-import Button from 'react-bootstrap/Button';
-import * as React from 'react';
-import { Alert, Form } from 'react-bootstrap';
-import { Note } from '../models/noteModals';
+import Button from "react-bootstrap/Button";
+import * as React from "react";
+import { Alert, Card, Form } from "react-bootstrap";
+import { Note } from "../models/noteModals";
 
 interface AddNoteProps {
-  notes: Note[],
-  setNotes: React.Dispatch<React.SetStateAction<Note[]>>
+  notes: Note[];
+  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
 }
 
-const AddNote: React.FunctionComponent<AddNoteProps> = ({notes, setNotes}) => {
-  const [err, setErr] = React.useState<string>("") 
-  const notetitle = React.useRef<HTMLInputElement | null>(null);
-  const noteText = React.useRef<HTMLTextAreaElement | null>(null);
-  const noteColor = React.useRef<HTMLInputElement | null>(null);
+const AddNote: React.FunctionComponent<AddNoteProps> = ({ notes, setNotes }) => {
+  const [err, setErr] = React.useState<string>("");
+  const [title, setTitle] = React.useState("");
+  const [text, setText] = React.useState("");
+  const [color, setColor] = React.useState("#f8f9fa");
+  const [pinned, setPinned] = React.useState(false);
 
-  const handleSave = (e:React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault()
-    if (notetitle.current?.value === "" || noteText.current?.value === "") {
-      return setErr("All fields are mandatory");
-  }
+  const handleSave = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
 
-  setErr("");
-  setNotes([...notes, {
-      id: (new Date()).toString(),
-      title: (notetitle.current as HTMLInputElement).value,
-      text: (noteText.current as HTMLTextAreaElement).value,
-      color: (noteColor.current as HTMLInputElement).value,
-      date: (new Date()).toString()
-  }]);
-  
-  (notetitle.current as HTMLInputElement).value = "";
-  (noteText.current as HTMLTextAreaElement).value = "";
+    if (!title.trim() || !text.trim()) {
+      setErr("Title and note text are required.");
+      return;
+    }
 
-}
+    setErr("");
+    setNotes([
+      {
+        id: crypto.randomUUID(),
+        title: title.trim(),
+        text: text.trim(),
+        color,
+        pinned,
+        date: new Date().toISOString(),
+      },
+      ...notes,
+    ]);
 
-  return(
-    <>
-    {err && <Alert variant="danger">{ err }</Alert>}
-            <Form className="mt-3 mb-3" onSubmit={(e)=> handleSave(e) }>
-                <Form.Group className="mb-3" controlId="formBasicTitle">
-                    <Form.Label>Title</Form.Label>
-                    <Form.Control type="text" placeholder="Enter Note" ref={notetitle} />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicText">
-                    <Form.Label>Text</Form.Label>
-                    <Form.Control placeholder="Enter your notes" as="textarea" rows={3} ref={ noteText }/>
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label htmlFor="colorInput">Notes Color</Form.Label>
-                    <Form.Control type="color" id="colorInput" defaultValue="#dfdfdf" title="Choose your color" ref={noteColor}/>
-                </Form.Group>
-                <Button  type="submit" variant="primary">Save</Button>
-            </Form>
-    </>
-  ) ;
+    setTitle("");
+    setText("");
+    setColor("#f8f9fa");
+    setPinned(false);
+  };
+
+  return (
+    <Card className="panel-card">
+      <Card.Body>
+        <Card.Title className="mb-3">Create note</Card.Title>
+        {err && <Alert variant="danger">{err}</Alert>}
+        <Form onSubmit={handleSave}>
+          <Form.Group className="mb-3" controlId="formBasicTitle">
+            <Form.Label>Title</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="What do you want to remember?"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicText">
+            <Form.Label>Text</Form.Label>
+            <Form.Control
+              placeholder="Write your note..."
+              as="textarea"
+              rows={6}
+              value={text}
+              onChange={(event) => setText(event.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="colorInput">Note Color</Form.Label>
+            <Form.Control
+              type="color"
+              id="colorInput"
+              title="Choose your color"
+              value={color}
+              onChange={(event) => setColor(event.target.value)}
+            />
+          </Form.Group>
+          <Form.Check
+            className="mb-3"
+            type="switch"
+            id="pin-switch"
+            label="Pin this note"
+            checked={pinned}
+            onChange={(event) => setPinned(event.target.checked)}
+          />
+          <Button type="submit" variant="dark" className="w-100">
+            Save Note
+          </Button>
+        </Form>
+      </Card.Body>
+    </Card>
+  );
 };
 
 export default AddNote;
